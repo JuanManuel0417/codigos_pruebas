@@ -4,12 +4,12 @@
     <meta charset="UTF-8">
     <title>Generador y Escáner de QR</title>
     <style>
+        video, canvas {
+            display: block;
+            margin: 0 auto;
+        }
         #previewCanvas {
             display: none;
-        }
-        video {
-            width: 300px;
-            height: 200px;
         }
     </style>
 </head>
@@ -19,7 +19,7 @@
     <input type="text" id="docNumber" name="docNumber">
     <button onclick="generateQR()">Generar QR</button>
     <br><br>
-    <canvas id="qrCanvas"></canvas>
+    <canvas id="qrCanvas" width="128" height="128"></canvas>
     <br><br>
     <h1>Escáner de Código QR</h1>
     <video id="preview" autoplay></video>
@@ -37,10 +37,13 @@
         navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } })
             .then(stream => {
                 video.srcObject = stream;
-                video.onloadedmetadata = () => video.play();
+                video.onloadedmetadata = () => {
+                    video.play();
+                };
             })
             .catch(error => {
                 console.error("Error accessing webcam:", error);
+                alert("No se pudo acceder a la cámara. Asegúrate de conceder los permisos necesarios.");
             });
 
         // Genera un código QR
